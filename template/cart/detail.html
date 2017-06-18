@@ -1,0 +1,154 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+{% load thumbnail %}
+
+
+{%block title%} Cart Detail{%endblock%}
+
+{%block content%}
+
+<div class="row text-center">
+<table class="table text-center">
+<tr>
+	<th class="text-center">Image</th>
+	<th class="text-center">Product Name</th>
+	<th class="text-center">Quantity</th>
+	<th class="text-center">Update</th>
+	<th class="text-center">Remove</th>
+	<th class="text-center">Price</th>
+</tr>
+<tbody>
+{%for item in cart%}
+{% with product=item.product%}
+<tr>
+	<td width="100"> 
+	{% with product.images.all|first as product_image%}
+	<img src="{% if product_image %} {{product_image.image|thumbnail_url:'sm'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" class="media-object" width="75" height="70">
+	{%endwith%}
+	</td>
+	<td >{{product.name}}</td>
+	<td >{{item.quantity}}</td>
+	<td>
+	<form action="{% url 'cart:cart_add' product.id%}" method='POST'>
+	{% csrf_token %}
+	{{item.update_quantity_form.quantity}}
+	{{item.update_quantity_form.update}}
+	<input type="submit" value="Update" />
+	</form>
+	</td>
+	<td>
+	<a href="{%url 'cart:cart_remove' product.id%}" class="btn btn-danger">Remove</a>
+	</td>
+	<td >${{item.price}}</td>
+</tr>
+{%endwith%}
+{%endfor%}
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- END OF TABLE-->
+<div class="row">
+<div class="col-sm-4">
+	<!-- Coupon Form -->
+	{%if cart|length > 0 %}
+		<form action="{% url 'coupons:coupon_apply' %}" method="POST" class="inline">
+		{% csrf_token %}
+			{{coupon_apply_form}}
+			<input type="submit" value="Apply" />
+		</form>
+	{%endif%}
+</div>
+<div class="col-sm-4 col-sm-offset-3">
+	<p class="text-right"> <strong>Total</strong></p>
+</div>
+<div class="col-sm-1">
+	<p class="text-center"> ${{cart.get_total_price}}</p>
+</div>
+</div>
+
+<!-- Coupon -->
+{% if cart.coupon %}
+{%with code=cart.coupon.code discount=cart.coupon.discount%}
+<div class="row">
+<div class="col-sm-4 col-sm-offset-7">
+	<p class="text-right"> <strong>Coupon</strong></p>
+</div>
+<div class="col-sm-1">
+	<p class="text-center">{{code}}</p>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-4 col-sm-offset-7">
+	<p class="text-right"> <strong>Discount</strong></p>
+</div>
+<div class="col-sm-1">
+	<p class="text-center bg-danger" >{{discount}} % OFF</p>
+</div>
+</div>
+{%endwith%}
+<div class="row">
+<div class="col-sm-4 col-sm-offset-7">
+	<p class="text-right"> <strong>Amount Discounted</strong></p>
+</div>
+<div class="col-sm-1">
+	<p class="text-center">${{cart.get_discount|floatformat:"2"}}</p>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-4 col-sm-offset-7">
+	<p class="text-right"> <strong>Subtotal</strong></p>
+</div>
+<div class="col-sm-1">
+	<p class="text-center bg-success">${{ cart.get_total_price_after_discount|floatformat:"2" }}</p>
+</div>
+</div>
+{%endif%}
+<!-- END OF CALCULATIONS-->
+
+
+<!-- Recommendation tag-->
+{%if recommended_products %}
+<div class="row ">
+	<h4 >People who bought this also bought </h4>
+	{% for object in recommended_products%}
+	<div class="col-xs-6 col-md-3 text-center">
+	{%with object.images.all|first as product_image%}
+	<a href="{{object.get_absolute_url}}" class="thumbnail">
+		<img src="{%if product_image%} {{product_image.image|thumbnail_url:'lg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" alt="...">
+	{%endwith%}
+		{{object.name}}
+	</a>
+	</div>
+	{%endfor%}
+</div>
+{%endif%}
+<!-- END OF RECOMMENDER -->
+
+
+<!-- Button for checkout-->
+<div class="row">
+	<div class="col-sm-2 col-sm-offset-9">
+		{%if cart|length > 0 %}
+		<a href="{% url 'shop:product_list'%}" class="btn btn-default">Continue Shopping</a>
+	</div>
+	<div class="col-sm-1">
+		<a href="{% url 'orders:order_create'%}" class="btn btn-primary">Checkout</a>
+	</div>
+	<div class="col-sm-2 col-sm-offset-10">
+		{%else%}
+		<a href="{% url 'shop:product_list'%}" class="btn btn-default">Continue Shopping</a>
+		{%endif%}
+	</div>
+</div>
+
+{%endblock%}

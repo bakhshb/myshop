@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{%block title%} Shipping Detail {%endblock%}
+
+{%block content%}
+
+<div class="row">
+	<div class="col-sm-6">
+	<form method="POST" class="form-horizontal">
+		{% csrf_token %}
+		{%include 'partials/form.html'%}
+		<div class="group-control">
+			<div class="col-sm-3 col-sm-offset-3">
+				<input type="submit" class="btn btn-primary" value="Submit" />
+			</div>
+		</div>
+	</form>
+	</div>
+	
+	<div class="col-sm-4 col-sm-offset-2">
+		<div class="panel panel-default">
+		  <div class="panel-heading">Summary of Your Order</div>
+		  <div class="panel-body">
+		{%for item in cart%}
+			{% with product=item.product%}
+		    <strong>Product Name</strong> {{product.name}} <br>
+		    <strong>Item Price</strong> {{item.total_price}} <br>
+		    <hr>
+		    {%endwith%}
+		{%endfor%}
+		<strong>Total</strong> ${{cart.get_total_price}}<br>
+	    {% if cart.coupon %}
+	    <strong>Code</strong> {{cart.coupon.code}} <br>
+	    <strong>Discount</strong> {{cart.coupon.discount}} % OFF <br>
+	    <strong>Abount Discounted</strong> ${{cart.get_discount|floatformat:"2"}} <br>
+	    <strong>Subtotal</strong> ${{ cart.get_total_price_after_discount|floatformat:"2" }}
+	    {%endif%}
+		   	
+		</div>
+		  </div>
+		</div>
+	</div>
+</div>
+{%endblock%}

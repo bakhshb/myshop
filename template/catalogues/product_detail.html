@@ -1,0 +1,123 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{%block title%} {{object.name}} {%endblock%}
+{%block style%}
+<style type="text/css">
+	
+.hide-bullets {
+list-style:none;
+margin-left: -40px;
+margin-top:20px;
+}
+</style>
+{%endblock%}
+
+{%block content%}
+
+<div class="row">
+	<div class="col-sm-7">
+	{%if object.images.all%}
+		<div class="carousel slide" id="myCarousel">
+		    <!-- Carousel items -->
+		    <div class="carousel-inner">
+		    {%for product_image in object.images.all%}
+		        <div class="{% if forloop.first %} active{%endif%} item" data-slide-number="{{product_image.id}}">
+		        <img src="{%if product_image%} {{product_image.image|thumbnail_url:'xlg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}">
+		        </div>
+		    {%endfor%}
+		    </div>
+		    <!-- Carousel nav -->
+		    <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+		        <span class="glyphicon glyphicon-chevron-left"></span>                                       
+		    </a>
+		    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+		        <span class="glyphicon glyphicon-chevron-right"></span>  
+		    </a>           -->                      
+		</div>
+		{%else%}
+		<img src="{% static 'image/image_not_found.jpg'%}" class="thumbnail" width="600" height="350">
+		{%endif%}
+	</div>
+	<!-- END OF SLIDER-->
+	<div class="col-sm-5">
+		<h1>{{object.name}}</h1>
+		<h2 class="green">${{object.price|floatformat:'0'}}</h2>
+		{% if object.available%}<h4>In Stock</h4>{%else%}<h4>Out Of Stock</h4>{%endif%}
+		<hr>
+		<form method="POST" action="{%url 'cart:cart_add' object.id%}">
+		{% csrf_token %}
+		{{cart_product_form}}
+			<input type="submit" class="btn btn-primary" value="Add to Cart" />
+		</form>
+	</div>
+</div>
+{%if object.images.all%}
+<div class="row hidden-xs" id="slider-thumbs">
+	<!-- Bottom switcher of slider -->
+	<ul class="hide-bullets">
+		{%for product_image in object.images.all%}
+	    <li class="col-sm-2">
+	        <a class="thumbnail" id="carousel-selector-{{product_image.id|add:-1}}"><img src="{{product_image.image|thumbnail_url:'sm'}}"></a>
+	    </li>
+	    {%endfor%}
+	</ul>                 
+</div>
+{%endif%}
+<!-- END OF SLIDER SWITCH BUTTON-->
+<div class="row">
+	<div class="col-sm-7">
+		<h2>Description</h2>
+		{{object.description}}
+	</div>
+	
+</div>
+
+<br>
+<!-- Recommendation tag-->
+{%if recommended_products %}
+<div class="row ">
+	<h4 >People who bought this also bought </h4>
+	{% for object in recommended_products%}
+	<div class="col-xs-6 col-md-3 text-center">
+	{%with object.images.all|first as product_image%}
+	<a href="{{object.get_absolute_url}}" class="thumbnail">
+		<img src="{%if product_image%} {{product_image.image|thumbnail_url:'lg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" alt="...">
+	{%endwith%}
+		{{object.name}}
+	</a>
+	</div>
+	{%endfor%}
+</div>
+{%endif%}
+<!-- END OF RECOMMENDER -->
+
+{%endblock%}
+
+{%block script%}
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+ 
+        $('#myCarousel').carousel({
+                interval: 5000
+        });
+ 
+        $('#carousel-text').html($('#slide-content-0').html());
+ 
+        //Handles the carousel thumbnails
+       $('[id^=carousel-selector-]').click( function(){
+            var id = this.id.substr(this.id.lastIndexOf("-") + 1);
+            var id = parseInt(id);
+            $('#myCarousel').carousel(id);
+        });
+ 
+ 
+        // When the carousel slides, auto update the text
+        $('#myCarousel').on('slid.bs.carousel', function (e) {
+                 var id = $('.item.active').data('slide-number');
+                $('#carousel-text').html($('#slide-content-'+id).html());
+        });
+});
+</script>
+{%endblock%}

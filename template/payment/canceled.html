@@ -1,0 +1,11 @@
+{%extends 'base.html'%}
+{%block title%}Payament Canceled{%endblock%}
+{%block content%}
+<h1>Payment has not been processed</h1>
+<!-- Button for checkout-->
+<div class="row">
+	<div class="col-sm-2 col-sm-offset-10">
+		<a href="{% url 'shop:product_list'%}" class="btn btn-primary">Continue Shopping</a>
+	</div>
+</div>
+{%endblock%}
