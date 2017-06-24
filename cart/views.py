@@ -34,13 +34,14 @@ class CartDetail (View):
 		if cart:
 			for item in cart:
 				item['update_quantity_form'] = CartAddProductForm(initial={'qunatity':item['quantity'],
-																			'update':True})
+																			'update':True},
+																			widget= True)
 			coupon_apply_form = CouponApplyForm()
 			
 			r = Recommender()
-			car_products = [item['product'] for item in cart]
-			if car_products:
-				recommended_products = r.suggest_products_for (car_products,4)
+			cart_products = [item['product'] for item in cart]
+			if cart_products:
+				recommended_products = r.suggest_products_for (cart_products,4)
 				return render(request,'cart/detail.html',{'cart':cart,
 														'coupon_apply_form':coupon_apply_form,
 														'recommended_products':recommended_products})

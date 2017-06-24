@@ -26,7 +26,7 @@ SECRET_KEY = 'x3p9ad+1m%sb9r=8+d%smggo3b776m+e&i&=o1ytwij*x5&n-='
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+SITE_ID= 1
 
 # Application definition
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'cart',
     'paypal.standard.ipn',
     'easy_thumbnails',
+    'vouchers',
 ]
 
 MIDDLEWARE = [
@@ -154,4 +155,14 @@ THUMBNAIL_ALIASES = {
         'lg': {'size': (200, 190)},
         'xlg':{'size': (600, 440)}
     },
+}
+
+# Messages Setting
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
 }

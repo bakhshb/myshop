@@ -23,11 +23,12 @@ class ProductDetail (DetailView):
 		# Call the base implementation first to get a context
 		context = super(ProductDetail, self).get_context_data(**kwargs)
 		# Add in a QuerySet of all the books
-		context['cart_product_form'] = CartAddProductForm()
+		context['cart_product_form'] = CartAddProductForm(widget=False)
 		#Recommended Product
 		r = Recommender()
 		recommended_products = r.suggest_products_for ([self.object],4)
 		context['recommended_products'] = recommended_products
+		context['range'] = range(0, self.object.stock)
 
 		return context 
 	
