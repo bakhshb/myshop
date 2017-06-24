@@ -1,0 +1,1 @@
+var carousel = require('./carousel');

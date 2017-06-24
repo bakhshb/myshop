@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'webpack_loader',
+    'paypal.standard.ipn',
+    'easy_thumbnails',
     'coupons',
     'catalogues',
     'orders',
     'cart',
-    'paypal.standard.ipn',
-    'easy_thumbnails',
+
 ]
 
 MIDDLEWARE = [
@@ -130,8 +132,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Webpack Settings
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'assets/webpack_bundles/', # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
 MEDIA_URL = '/media/'
