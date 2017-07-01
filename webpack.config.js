@@ -12,23 +12,9 @@ module.exports = {
   },
   module: {
     loaders: [
-      {
-        test: /\.js?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets:['react', 'es2015']
-        }
-      }, // to transform JSX into JS
-      {
-        test: /\.scss?$/,
-        loader: ExtractTextPlugin.extract('css-loader!sass-loader!style-loader'),
-
-      },
-      { 
-        test:/bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/, 
-        loader: 'imports-loader?jQuery=jquery',
-      },
+      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader', query: {presets:['react', 'es2015']}}, // to transform JSX into JS
+      { test: /\.scss?$/, loader: ExtractTextPlugin.extract('css-loader!sass-loader!style-loader')},
+      { test:/bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/, loader: 'imports-loader?jQuery=jquery'},
       { test: /\.(woff2?|svg)$/, loader: 'url-loader?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file-loader' },
     ]
@@ -36,7 +22,7 @@ module.exports = {
 
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
-    new ExtractTextPlugin({filename: 'styles.css',  allChunks: false }),
+    new ExtractTextPlugin({filename: '[name].css',  allChunks: false }),
     new webpack.ProvidePlugin({
     $: "jquery",
     jQuery: "jquery",

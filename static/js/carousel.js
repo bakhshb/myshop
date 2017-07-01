@@ -1,4 +1,5 @@
-import 'jquery'
+import jQuery from 'jquery';
+
 module.exports = jQuery(document).ready(function($) {
  
         $('#myCarousel').carousel({
