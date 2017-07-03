@@ -6,6 +6,10 @@ from .cart import Cart
 from coupons.forms import CouponApplyForm
 from catalogues.recommender import Recommender
 
+from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
+import json
+
 class CartAdd (View):
 	def post (self, request, *args, **kwargs):
 		product_id = kwargs['product_id']
@@ -49,3 +53,34 @@ class CartDetail (View):
 														'coupon_apply_form':coupon_apply_form})
 		else:
 			return redirect ('shop:product_list')
+
+
+def cart_add (request, product_id):
+	cart = Cart(request)
+	if request.is_ajax and request.method == 'POST':
+		product = get_object_or_404(Product, id = product_id)
+		form = CartAddProductForm(request.POST)
+		data = {}
+		if form.is_valid():
+			cd = form.cleaned_data
+			print (cd['update'])
+			cart.add(product = product,
+						quantity= cd['quantity'],
+						update_quantity=cd['update'])
+			messages.success(request,"It was added to the cart")
+			data = {
+			'message': 'It was added to the cart'
+			}
+		
+		return JsonResponse(data);
+
+
+def cart_session (request):
+	cart= Cart(request)
+	data = {
+		'qunatity': len(cart),
+		'price': str(cart.get_total_price())
+	}
+	print(len(cart))
+
+	return HttpResponse (json.dumps(data))

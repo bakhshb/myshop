@@ -1,6 +1,8 @@
-import jQuery from 'jquery';
+import $ from 'jquery';
+var Cart = require('./cart');
 
-module.exports = jQuery(document).ready(function($) {
+
+module.exports = $(document).ready(function($) {
  
         $('#myCarousel').carousel({
                 interval: 5000

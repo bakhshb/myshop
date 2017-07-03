@@ -36,7 +36,8 @@
 		<h2 class="green">${{object.price|floatformat:'0'}}</h2>
 		{% if object.available%}<h4>In Stock</h4>{%else%}<h4>Out Of Stock</h4>{%endif%}
 		<hr>
-		<form method="POST" action="{%url 'cart:cart_add' object.id%}">
+		<!-- FORM-->
+		<form method="POST" {# action="{%url 'cart:cart_add' object.id%}" #} id="cart-form" data-id="{{object.id}}">
 		{% csrf_token %}
 		{{cart_product_form}}
 			<input type="submit" class="btn btn-primary" value="Add to Cart" />

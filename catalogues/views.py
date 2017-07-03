@@ -30,7 +30,3 @@ class ProductDetail (DetailView):
 		context['recommended_products'] = recommended_products
 
 		return context 
-	
-class ProductCreate (CreateView):
-	model= Product
-	fields=['catalogue','name','image','description','price','stock']
