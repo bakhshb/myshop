@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'coupons',
     'catalogues',
     'orders',
-    'cart',
+    'carton',
     'vouchers',
 ]
 
@@ -74,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
+                'carton.context_processors.carton',
             ],
         },
     },
@@ -176,3 +177,7 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+CART_SESSION_KEY = 'cart'
+CART_TEMPLATE_TAG_NAME = 'get_cart'
+CART_PRODUCT_MODEL = 'catalogues.models.Product'

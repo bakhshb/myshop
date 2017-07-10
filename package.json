@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --colors",
-    "watch-server": "node server.js"
+    "watch-server": "NODE_ENV=development node server.js"
   },
   "devDependencies": {
     "babel": "^6.23.0",

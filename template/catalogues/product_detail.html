@@ -34,12 +34,11 @@
 	<div class="col-sm-5">
 		<h1>{{object.name}}</h1>
 		<h2 class="green">${{object.price|floatformat:'0'}}</h2>
-		{% if object.available%}<h4>In Stock</h4>{%else%}<h4>Out Of Stock</h4>{%endif%}
+		{% if object.stock >= 1%}<h4>{{object.stock}} in Stock</h4>{%else%}<h4>Out Of Stock</h4>{%endif%}
 		<hr>
 		<!-- FORM-->
-		<form method="POST" {# action="{%url 'cart:cart_add' object.id%}" #} id="cart-form" data-id="{{object.id}}">
-		{% csrf_token %}
-		{{cart_product_form}}
+		<form method="POST" {# action="{%url 'cart:cart_add' object.id%}" #} id="cart-form" data-id="{{object.id}}" data-stock="{{object.stock}}">
+			{% csrf_token %}
 			<input type="submit" class="btn-lg btn-primary" value="Add to Cart" />
 		</form>
 	</div>

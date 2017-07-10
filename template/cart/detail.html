@@ -1,12 +1,12 @@
 {% extends 'base.html'%}
 {% load staticfiles %}
 {% load thumbnail %}
-
+{% load carton_tags %}
 
 {%block title%} Cart Detail{%endblock%}
 
 {%block content%}
-
+{% get_cart as cart %}
 <div class="row text-center">
 <table class="table text-center">
 <tr>
@@ -18,7 +18,7 @@
 	<th class="text-center">Price</th>
 </tr>
 <tbody>
-{%for item in cart%}
+{%for item in cart.items%}
 {% with product=item.product%}
 <tr>
 	<td width="100"> 
@@ -27,12 +27,14 @@
 	{%endwith%}
 	</td>
 	<td>{{product.name}}</td>
-	<td id="quan">{{item.quantity}}</td>
+	<td>{{item.quantity}}</td>
 	<td>
 	<form  action="{% url 'cart:cart_update' product.id%}" method='POST'>
 	{% csrf_token %}
-	{{item.update_quantity_form.quantity}}
-	{{item.update_quantity_form.update}}
+	<!-- <input type="text" name="quantity" id="id_quantity" maxlength="1" size="2"> -->
+	{% for field in form.visible_fields %}
+        {{ field }}
+    {% endfor %}
 	<input type="submit" value="Update" />
 	</form>
 	</td>
@@ -58,7 +60,7 @@
 <div class="row">
 <div class="col-sm-4">
 	<!-- Coupon Form -->
-	{%if cart|length > 0 %}
+	{%if cart.items|length > 0 %}
 		<form action="{% url 'coupons:coupon_apply' %}" method="POST" class="inline">
 		{% csrf_token %}
 			{{coupon_apply_form}}
@@ -70,7 +72,7 @@
 	<p class="text-right"> <strong>Total</strong></p>
 </div>
 <div class="col-sm-1">
-	<p class="text-center"> ${{cart.get_total_price}}</p>
+	<p class="text-center"> ${{cart.total}}</p>
 </div>
 </div>
 
@@ -138,7 +140,7 @@
 <!-- Button for checkout-->
 <div class="row">
 	<div class="col-sm-2 col-sm-offset-9">
-		{%if cart|length > 0 %}
+		{%if cart.items|length > 0 %}
 		<a href="{% url 'shop:product_list'%}" class="btn btn-default">Continue Shopping</a>
 	</div>
 	<div class="col-sm-1">
