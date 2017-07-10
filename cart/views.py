@@ -9,6 +9,7 @@ from catalogues.recommender import Recommender
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 import json
+from decimal import Decimal
 
 
 def cart_detail (request):
@@ -39,19 +40,19 @@ def cart_add (request, product_id):
 	if request.is_ajax and request.method == 'POST':
 		product = get_object_or_404(Product, id = product_id)
 		form = CartAddProductForm(request.POST)
-		data = {}
 		if form.is_valid():
 			cd = form.cleaned_data
-			print (cd['update'])
+			
 			cart.add(product = product,
 						quantity= cd['quantity'],
 						update_quantity=cd['update'])
 			# messages.success(request,"It was added to the cart")
 			data = {
-			'message': 'It was added to the cart'
+			'message': 'It was added to the cart',
+			'status': 'true'
 			}
 		
-		return JsonResponse(data);
+		return JsonResponse(data)
 
 def cart_update(request, product_id):
 	cart = Cart(request)
@@ -61,7 +62,6 @@ def cart_update(request, product_id):
 		data = {}
 		if form.is_valid():
 			cd = form.cleaned_data
-			print (cd['update'])
 			cart.add(product = product,
 						quantity= cd['quantity'],
 						update_quantity=cd['update'])
