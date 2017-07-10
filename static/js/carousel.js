@@ -23,4 +23,12 @@ module.exports = $(document).ready(function($) {
                  var id = $('.item.active').data('slide-number');
                 $('#carousel-text').html($('#slide-content-'+id).html());
         });
+        //Message alert
+        $('#message #success .close').on('click',function(e) {
+            $('#message').hide();
+        });
+
+        $('#message #error .close').on('click',function(e) {
+            $('#message').hide();
+        });
 });

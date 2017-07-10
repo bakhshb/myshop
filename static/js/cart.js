@@ -34,6 +34,7 @@ class App extends React.Component {
   		var _this = this
       this.getdata();
       $(document).ready(function() {
+        var counter = 0;
         $('#cart-form').submit(function(e){
           e.preventDefault();
           var id = $('#cart-form').data('id');
@@ -47,6 +48,13 @@ class App extends React.Component {
               },
               success: function(response){
                   _this.getdata();
+                  // alert(response.message);
+                  if (counter <= 0){
+                    $('#message #success').show();
+                    $('#message #success').append (response.message) ;
+                    counter++;
+                  }
+                  $('#message #sucess').show();
               }
             });//END OF AJAX
          });
@@ -68,11 +76,9 @@ class App extends React.Component {
   	render() {
       return (
           <Items qunatity={this.state.qunatity} price= {this.state.price}/>
-         // <div>
-         // <Items qunatity={this.state.qunatity} price= {this.state.price}/>
-         // </div>
       );
    	}
 }
 
 module.exports = App
+

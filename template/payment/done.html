@@ -52,6 +52,40 @@
 </div>
 </div>
 
+<!-- END OF PRICE-->
+{%for item in order.items.all%}
+{%if item.product.is_coupon%}
+<div class="row">
+<div class="col-sm-2 col-sm-offset-8">
+
+	<p class="text-right"> <strong>Code</strong></p>
+</div>
+<div class="col-sm-2">
+	{%for voucher in item.vouchers.all%}
+	<p class="text-center bg-danger">
+	<span class="">{{voucher.code}} </span>
+	</p>
+	{%endfor%}
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-2 col-sm-offset-8">
+
+	<p class="text-right"> <strong>Secret Code</strong></p>
+</div>
+<div class="col-sm-2">
+	{%for voucher in item.vouchers.all%}
+	<p class="text-center bg-danger">
+	<span class="">{{voucher.secret_code}} </span>
+	</p>
+	{%endfor%}
+</div>
+</div>
+{%endif%}
+{%endfor%}
+
+
 
 
 <!-- Button for checkout-->

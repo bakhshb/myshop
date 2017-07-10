@@ -7,7 +7,7 @@
 {% block content %}
 <div class="row text-center">
 {% for object in object_list%}
-    <div class="col-sm-4 ">
+    <div class="col-sm-3 ">
     {% with object.images.all|first as product_image%}
 	    <img class="img-circle" src="{%if product_image%} {{product_image.image|thumbnail_url:'lg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" width="140" height="140">
 	{%endwith%}

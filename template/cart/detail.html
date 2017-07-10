@@ -26,10 +26,10 @@
 	<img src="{% if product_image %} {{product_image.image|thumbnail_url:'sm'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" class="media-object" width="75" height="70">
 	{%endwith%}
 	</td>
-	<td >{{product.name}}</td>
-	<td >{{item.quantity}}</td>
+	<td>{{product.name}}</td>
+	<td id="quan">{{item.quantity}}</td>
 	<td>
-	<form {# action="{% url 'cart:cart_add' product.id%}" #} method='POST' id="cart-form" data-id="{{product.id}}">
+	<form  action="{% url 'cart:cart_update' product.id%}" method='POST'>
 	{% csrf_token %}
 	{{item.update_quantity_form.quantity}}
 	{{item.update_quantity_form.update}}

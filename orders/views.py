@@ -22,7 +22,7 @@ class OrderCreate (View):
 			if self.cart.coupon():
 				order.coupon = self.cart.coupon()
 				order.discount = self.cart.coupon().discount
-			order.save()
+			order.save() 
 
 			for item in self.cart:
 				OrderItem.objects.create(order=order, product=item['product'],price=item['price'],
@@ -35,3 +35,5 @@ class OrderCreate (View):
 			request.session['order_id'] = order.id
 
 			return redirect(reverse('payment:process'))
+		else:
+			return render(request, 'orders/order_form.html', {'form':form})
