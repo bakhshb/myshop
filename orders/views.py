@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import OrderCreateForm
 from .models import Order, OrderItem
 from carton.cart import Cart
-from catalogues.models import Product
+from category.models import Product
 
 class OrderCreate (View):
 	def dispatch(self, request, *args, **kwargs):

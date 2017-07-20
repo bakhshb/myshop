@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from paypal.standard.forms import PayPalPaymentsForm
 from orders.models import Order, OrderItem
-from catalogues.models import Images
+from category.models import Images
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
 

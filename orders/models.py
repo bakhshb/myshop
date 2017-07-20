@@ -1,5 +1,5 @@
 from django.db import models
-from catalogues.models import Product
+from category.models import Product
 from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from coupons.models import Coupon

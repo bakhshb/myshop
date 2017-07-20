@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'easy_thumbnails',
     'coupons',
-    'catalogues',
+    'category',
     'orders',
     'carton',
     'vouchers',
@@ -73,7 +73,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart',
                 'carton.context_processors.carton',
             ],
         },
@@ -163,7 +162,7 @@ REDIS_DB= 1
 THUMBNAIL_ALIASES = {
     '': {
         'sm': {'size': (50, 50), 'crop': True},
-        'lg': {'size': (200, 190)},
+        'lg': {'size': (320, 150)},
         'xlg':{'size': (600, 440)}
     },
 }
@@ -180,4 +179,4 @@ MESSAGE_TAGS = {
 
 CART_SESSION_KEY = 'cart'
 CART_TEMPLATE_TAG_NAME = 'get_cart'
-CART_PRODUCT_MODEL = 'catalogues.models.Product'
+CART_PRODUCT_MODEL = 'category.models.Product'

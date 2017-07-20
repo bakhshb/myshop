@@ -25,15 +25,13 @@
     {%block style%}{%endblock%}
   </head>
   <body>
-  {%include 'partials/nav.html'%}
+    {%include 'partials/nav.html'%}
 
-    <div class="container">
-    <div id="app"></div>
     {%include 'partials/messages.html'%}
+
     {%block content%}
     {%endblock%}
 
-    </div>
     {% render_bundle 'main' 'js' %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->

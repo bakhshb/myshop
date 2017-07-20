@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-from catalogues.models import Product
-from catalogues.recommender import Recommender
+from category.models import Product
+from category.recommender import Recommender
 from coupons.forms import CouponApplyForm
 from .forms import CartAddProductForm
 from .cart import Cart 
@@ -42,15 +42,21 @@ def cart_add (request, product_id):
 
 def cart_update(request, product_id):
 	cart = Cart(request.session)
-	if request.method == 'POST':
+	if request.is_ajax and request.method == 'POST':
 		product = get_object_or_404(Product, id = product_id)
 		form = CartAddProductForm(request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
-			cart.set_quantity(product, quantity= cd['qunatity'])
-			messages.success(request,"It was added to the cart")
+			cart.set_quantity(product, quantity= cd['quantity'])
+		# 	messages.success(request,"It was added to the cart")
 		
-		return redirect ('cart:cart_detail')
+		# return redirect ('cart:cart_detail')
+		data = {
+		'message': 'It was added to the cart',
+		'status': 'true'
+		}
+		
+		return JsonResponse(data)
 
 def cart_remove (request, product_id):
 	cart= Cart(request.session)
@@ -61,9 +67,15 @@ def cart_remove (request, product_id):
 def cart_session (request):
 	cart= Cart(request.session)
 	data = {
-		'quantity': cart.count,
-		'price': str(cart.total)
-	}
+			'quantity': cart.count,
+			'price': str(cart.total),
+		}
+	if cart.coupon():
+		data = {
+			'quantity': cart.count,
+			'price': str(cart.total),
+			'totalDiscount': str(cart.get_total_price_after_discount()),
+		}
 	return HttpResponse (json.dumps(data))
 
 def cart_quantity(request, product_id):

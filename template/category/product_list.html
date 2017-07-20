@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load jsonify %}
+
+{%block title%} Home {%endblock%}
+
+{% block content %}
+<script type="text/javascript">
+	var product = '{{object_list|jsonify}}';
+	var product_json = JSON.parse(product) ;
+</script>
+
+<div class="container" id="product">
+	<div class="row">
+	{% for object in object_list%}
+		<div class="col-sm-4 col-lg-4 col-md-4 ">
+			<div class="thumbnail">
+				<img class="img-responsive" src="{%if object.image%} {{object.image|thumbnail_url:'lg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" style="height:150px">
+				<script type="text/javascript">
+					for (var i=0; i< product_json.length; i++){
+						if (product_json[i].pk === {{object.id}}){
+							console.log(product_json[i].fields.image);
+							product_json[i].fields.image = '{{object.image|thumbnail_url:'lg'}}';
+							console.log(product_json[i].fields.image);
+						}
+					}
+				</script>
+				<div class="caption">
+					<h4 class="pull-right">{{object.price}}</h4>
+					<h4><a href="{% url 'shop:product_detail' object.id object.slug%}" >{{object.name}}</a></h4>
+					<p>{{object.price}}</p>
+				{% if object.stock >= 1%}<p>In Stock {%else%} Out Of Stock</p>{%endif%}
+
+				</div>
+			</div>
+		</div>
+	{%endfor%}
+	</div>
+</div>
+
+<!--<div id="product"></div>-->
+{%endblock%}
