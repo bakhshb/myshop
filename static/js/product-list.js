@@ -1,4 +1,5 @@
 import React from 'react';
+import Pagination from './pagination';
 
 class ProductRow extends React.Component{
     render(){
@@ -21,20 +22,20 @@ class ProductRow extends React.Component{
 
 
 class ProductList extends React.Component{
-
     render(){
-       var rows = [];
-       var filterText=this.props.filterText;
-       this.props.data.map(function(product){
+        var rows = [];
+        var filterText= this.props.filterText;
+        this.props.data.map(function(product){
 
-            if (product.fields.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1 ){
-                return;
-            }
-            rows.push(<ProductRow data={product} key={product.pk} />);
-        });
-
-        return (
-            <div className="row">{rows}</div>
+             if (product.fields.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1 ){
+                 return;
+             }
+             rows.push(<ProductRow data={product} key={product.pk} />);
+         });
+     return (
+        <div className="row">
+        {rows}
+        </div>
         );
     }
 }
@@ -74,21 +75,36 @@ class FilterableProduct extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          filterText: ''
+          filterText: '',
+          pageOfItems: []
         };
 
         this.handleSearch = this.handleSearch.bind(this);
+        this.onChangePage = this.onChangePage.bind(this);
     }
 
     handleSearch(filterText){
         this.setState({filterText: filterText});
     }
 
+    onChangePage(pageOfItems) {
+        // update state with new page of items
+        this.setState({ pageOfItems: pageOfItems });
+    }
+
     render(){
+        var data;
+        if (this.state.filterText !== ''){
+            data = this.props.data;
+        }else{
+            data = this.state.pageOfItems;
+        }
         return(
         <div>
             <SearchBar onUserInput={this.handleSearch} filterText={this.state.filterText} />
-            <ProductList data={this.props.data} filterText={this.state.filterText} />
+            <ProductList data={data} filterText={this.state.filterText} />
+            {this.state.filterText? '' :
+            <Pagination items={this.props.data} onChangePage={this.onChangePage} itemsPerPage='10' />}
         </div>
         );
 
