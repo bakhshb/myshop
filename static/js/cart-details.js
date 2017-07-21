@@ -37,7 +37,7 @@ class QuantityForm extends React.Component{
     render(){
         return(
             <form className="form-inline" onSubmit={this.handleQtySubmit}>
-            <input type="number" className="form-control text-center"  id="id_quantity" value={this.state.value} onChange={this.handleQtyChange} size='5' maxLength='1' style={{'width':'50px'}}/>
+            <input type="number" className="form-control text-center"  id="id_quantity" value={this.state.value} onChange={this.handleQtyChange} size='5' maxLength='1' min='0' style={{'width':'50px'}}/>
             <button type="submit" className="btn btn-primary btn-sm" value="Update"><span className="glyphicon glyphicon-refresh"></span></button>
             </form>
         );
@@ -127,10 +127,11 @@ class ProductRow extends React.Component{
         <tr>
         <td className="col-sm-8 col-md-6">
         <div className="media">
-        <a className="thumbnail pull-left" href="#"> <img className="media-object" src={product.product.image} style={divStyle}/> 
+        <a className="thumbnail pull-left" href={"/product/"+product.product.pk +"/"+product.product.slug+"/"}> 
+        <img className="media-object" src={product.product.image} style={divStyle}/> 
         </a>
         <div className="media-body">
-        <h4 className="media-heading"><a href="#">{product.product.name}</a></h4>
+        <h4 className="media-heading"><a href={"/product/"+product.product.pk +"/"+product.product.slug+"/"}>{product.product.name}</a></h4>
         </div>
         </div>
         </td>
@@ -187,6 +188,7 @@ class ProductTable extends React.Component {
     }, this);
 
     var discount = (
+        <tbody>
         <tr>
         <td>   </td>
         <td>   </td>
@@ -194,8 +196,6 @@ class ProductTable extends React.Component {
         <td><h3>Total</h3></td>
         <td className="text-right"><h3><strong>${this.state.totalDiscount}</strong></h3></td>
         </tr>
-        );
-    var empty= (
         <tr>
         <td></td>
         <td></td>
@@ -207,6 +207,22 @@ class ProductTable extends React.Component {
         <a href="/orders/create" className="btn btn-success"><span className="glyphicon glyphicon-play"></span> Checkout</a>
         </td>
         </tr>
+        </tbody>
+        );
+    var empty= (
+        <tbody>
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+        <a href="/" className="btn btn-default"><span className="glyphicon glyphicon-shopping-cart"></span> Continue Shopping</a>
+        </td>
+        <td>
+        <a href="/orders/create" className="btn btn-success"><span className="glyphicon glyphicon-play"></span> Checkout</a>
+        </td>
+        </tr>
+        </tbody>
         )
     return(
         <div className="row">
@@ -228,12 +244,11 @@ class ProductTable extends React.Component {
         <td><CouponForm/> </td>
         <td></td>
         <td></td>
-        <td><h5>{this.state.discount? 'Total': 'Subtotal'}</h5></td>
-        <td className="text-right"><h5><strong>${this.state.total}</strong></h5></td>
+        <td><h4>{this.state.totalDiscount? 'Subtotal': 'Total'}</h4></td>
+        <td className="text-right"><h4><strong>${this.state.total}</strong></h4></td>
         </tr>
-        {this.state.totalDiscount? discount: empty}
-        {this.state.totalDiscount? empty:''}
         </tbody>
+        {this.state.totalDiscount? discount: empty}
         </table>
         </div>
         </div>
