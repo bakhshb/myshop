@@ -28,7 +28,7 @@ class CartBar extends React.Component {
         this.state = {
             quantity: '',
             price: '',
-          current_quantity: ''};
+          totalDiscount: ''};
 
         this.updateCart = this.updateCart.bind(this);
         $(document).bind('update.cart', this.updateCart);
@@ -45,7 +45,8 @@ class CartBar extends React.Component {
 
         this.setState({
           price: response.data.price,
-          quantity: response.data.quantity
+          quantity: response.data.quantity,
+          totalDiscount: response.data.totalDiscount,
         });
         this.forceUpdate();
 
@@ -53,8 +54,9 @@ class CartBar extends React.Component {
     }
 
   	render() {
+      var total = this.state.totalDiscount?this.state.totalDiscount:this.state.price
       return (
-          <Items quantity={this.state.quantity} price= {this.state.price}/>
+          <Items quantity={this.state.quantity} price= {total}/>
       );
    	}
 }
