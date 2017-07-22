@@ -99,12 +99,13 @@ class FilterableProduct extends React.Component{
         }else{
             data = this.state.pageOfItems;
         }
+        var perPage = 10;
         return(
         <div>
             <SearchBar onUserInput={this.handleSearch} filterText={this.state.filterText} />
             <ProductList data={data} filterText={this.state.filterText} />
             {this.state.filterText? '' :
-            <Pagination items={this.props.data} onChangePage={this.onChangePage} itemsPerPage='10' />}
+            <Pagination items={this.props.data} onChangePage={this.onChangePage} itemsPerPage={perPage} />}
         </div>
         );
 
