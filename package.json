@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --colors",
-    "watch-server": "NODE_ENV=development node server.js"
+    "watch-server": "set NODE_ENV=development && node server.js"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -36,6 +36,7 @@
     "bootstrap-loader": "^2.1.0",
     "bootstrap-sass": "^3.3.7",
     "jquery": "^3.2.1",
+    "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   }
