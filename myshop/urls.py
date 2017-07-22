@@ -21,12 +21,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pages/', include('django.contrib.flatpages.urls')),
-    url(r'^cart/', include('cart.urls', namespace='cart')),
+    url(r'^cart/', include('carton.urls', namespace='cart')),
+    # url(r'^carton/', include('carton.urls', namespace='carton')),
     url(r'^orders/', include('orders.urls', namespace='orders')),
     url(r'^coupons/', include('coupons.urls', namespace='coupons')),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
     url(r'^payment/', include('payment.urls', namespace='payment')),
-    url(r'^', include('catalogues.urls', namespace='shop')),
+    url(r'^', include('category.urls', namespace='shop')),
 ]
 
 if settings.DEBUG:

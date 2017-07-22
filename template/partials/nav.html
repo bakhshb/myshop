@@ -52,14 +52,14 @@
             <li><a href="#">Separated link</a></li>
           </ul>
         </li> -->
-        {% with total_items=cart|length%}
-        {%if cart|length > 0%} 
-        <li><a href="{%url 'cart:cart_detail'%}">
+        {% with total_items=carton.items|length%}
+        {%if carton.items|length > 0%} 
+        <li id="cart"><a href="{%url 'cart:cart_detail'%}">
         <span class="glyphicon glyphicon-shopping-cart"></span>
-        {{total_items}} item {{total_items|pluralize}}, ${{cart.get_total_price}} 
+        {{total_items}} item {{total_items|pluralize}}, ${{carton.total}} 
         </a></li>
         {%else%}
-        <li> <a href = "#" > 
+        <li id="cart"> <a href = "#" > 
         <span class="glyphicon glyphicon-shopping-cart"></span> cart is empty</a>
         </li>
         {%endif%}

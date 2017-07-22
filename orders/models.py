@@ -1,16 +1,16 @@
 from django.db import models
-from catalogues.models import Product
+from category.models import Product
 from decimal import Decimal
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from coupons.models import Coupon
 # Create your models here.
 class Order(models.Model):
-	first_name = models.CharField(max_length=200)
-	last_name = models.CharField(max_length=200)
+	first_name = models.CharField(max_length=50, validators=[MinLengthValidator(3)])
+	last_name = models.CharField(max_length=50, validators=[MinLengthValidator(3)])
 	email = models.EmailField()
-	address = models.CharField(max_length=200)
+	address = models.CharField(max_length=50)
 	post_code = models.CharField(max_length=20)
-	city = models.CharField(max_length=100)
+	city = models.CharField(max_length=50)
 	created = models.DateTimeField (auto_now_add=True)
 	updated = models.DateTimeField (auto_now=True)
 	paid = models.BooleanField(default=False)
@@ -37,3 +37,17 @@ class OrderItem (models.Model):
 
 	def get_cost (self):
 		return self.price * self.quantity
+
+	def save(self,*args,**kwargs):
+		super(OrderItem,self).save(*args,**kwargs)
+		if self.product.is_coupon:
+			from vouchers.models import Voucher
+			from random import randint
+			import datetime
+
+			voucher = Voucher(order_item=self, code= str(randint(100,999)),
+						secret_code=str(randint(100,999)),
+						 valid_till = datetime.datetime.now())
+			voucher.save()
+		
+

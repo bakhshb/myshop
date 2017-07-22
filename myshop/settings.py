@@ -26,7 +26,7 @@ SECRET_KEY = 'x3p9ad+1m%sb9r=8+d%smggo3b776m+e&i&=o1ytwij*x5&n-='
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+SITE_ID= 1
 
 # Application definition
 
@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'coupons',
-    'catalogues',
-    'orders',
-    'cart',
+    'webpack_loader',
     'paypal.standard.ipn',
     'easy_thumbnails',
+    'coupons',
+    'category',
+    'orders',
+    'carton',
+    'vouchers',
 ]
 
 MIDDLEWARE = [
@@ -71,7 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart',
+                'carton.context_processors.carton',
             ],
         },
     },
@@ -130,8 +132,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Webpack Settings
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'assets/webpack_bundles/', # must end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
 MEDIA_URL = '/media/'
@@ -151,7 +162,21 @@ REDIS_DB= 1
 THUMBNAIL_ALIASES = {
     '': {
         'sm': {'size': (50, 50), 'crop': True},
-        'lg': {'size': (200, 190)},
+        'lg': {'size': (320, 150)},
         'xlg':{'size': (600, 440)}
     },
 }
+
+# Messages Setting
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
+CART_SESSION_KEY = 'cart'
+CART_TEMPLATE_TAG_NAME = 'get_cart'
+CART_PRODUCT_MODEL = 'category.models.Product'

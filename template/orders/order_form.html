@@ -1,5 +1,6 @@
 {%extends 'base.html'%}
 {%block title%} Shipping Detail {%endblock%}
+{% load carton_tags %}
 
 {%block content%}
 
@@ -20,18 +21,19 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading">Summary of Your Order</div>
 		  <div class="panel-body">
-		{%for item in cart%}
+		{% get_cart as cart %}
+		{%for item in cart.items%}
 			{% with product=item.product%}
 		    <strong>Product Name</strong> {{product.name}} <br>
-		    <strong>Item Price</strong> {{item.total_price}} <br>
+		    <strong>Item Price</strong> {{item.price}} <br>
 		    <hr>
 		    {%endwith%}
 		{%endfor%}
-		<strong>Total</strong> ${{cart.get_total_price}}<br>
+		<strong>Total</strong> ${{cart.total}}<br>
 	    {% if cart.coupon %}
 	    <strong>Code</strong> {{cart.coupon.code}} <br>
 	    <strong>Discount</strong> {{cart.coupon.discount}} % OFF <br>
-	    <strong>Abount Discounted</strong> ${{cart.get_discount|floatformat:"2"}} <br>
+	    <strong>Amount Discounted</strong> ${{cart.get_discount|floatformat:"2"}} <br>
 	    <strong>Subtotal</strong> ${{ cart.get_total_price_after_discount|floatformat:"2" }}
 	    {%endif%}
 		   	

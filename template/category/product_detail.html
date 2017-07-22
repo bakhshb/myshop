@@ -1,0 +1,211 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load jsonify %}
+
+
+{%block title%} {{object.name}} {%endblock%}
+
+{%block content%}
+<script type="text/javascript">
+	var c = '{{object|jsonify}}';
+	var cc = JSON.parse(c) ;
+	
+</script>
+
+<div class="container-fluid">
+    <div class="content-wrapper">
+		<div class="item-container">
+			<div class="container">
+				<div class="col-md-12">
+					<div class="product col-md-3 service-image-left">
+						{%if object.images.all%}
+						<div class="carousel slide" id="myCarousel">
+							<!-- Carousel items -->
+							<div class="carousel-inner">
+							{%for product_image in object.images.all%}
+								<div class="{% if forloop.first %} active{%endif%} item" data-slide-number="{{product_image.id}}">
+								<img src="{%if product_image%} {{product_image.image|thumbnail_url:'xlg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}">
+								</div>
+							{%endfor%}
+							</div>
+							<!-- Carousel nav -->
+							 <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+								<span class="glyphicon glyphicon-chevron-left"></span>
+							</a>
+							<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+							</a>
+						</div>
+						{%else%}
+						<img src="{% static 'image/image_not_found.jpg'%}" class="thumbnail" height="320">
+						{%endif%}
+					</div>
+					<div class="container service1-items col-sm-2 col-md-2 pull-left">
+						{%if object.images.all%}
+
+						{%for product_image in object.images.all%}
+							<a class="service1-item" id="carousel-selector-{{product_image.id|add:-1}}"><img src="{{product_image.image|thumbnail_url:'sm'}}"></a>
+						{%endfor%}
+						{%endif%}
+						<!-- END OF SLIDER SWITCH BUTTON-->
+					</div>
+<!-- END OF SLIDER-->
+					<div class="col-md-7">
+					<div class="product-title">{{object.name}}</div>
+					<div class="product-desc">{{object.description}}</div>
+					<div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
+					<hr>
+					<div class="product-price">$ {{object.price}}</div>
+					{% if object.stock >= 1%}
+					<div class="product-stock">{{object.stock}} in Stock</div>
+					{%else%}
+					<div class="product-stock">Out Of Stock</div>
+					{%endif%}
+					<hr>
+					<div class="btn-group cart">
+						<form method="POST" {# action="{%url 'cart:cart_add' object.id%}" #} id="cart-form" data-id="{{object.id}}" data-stock="{{object.stock}}">
+							{% csrf_token %}
+							<input type="submit" class="btn btn-success" value="Add to Cart" />
+						</form>
+						<!--<button type="button" class="btn btn-success">-->
+							<!--Add to cart-->
+						<!--</button>-->
+					</div>
+					<div class="btn-group wishlist">
+						<button type="button" class="btn btn-danger">
+							Add to wishlist
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="col-md-12 product-info">
+					<ul id="myTab" class="nav nav-tabs nav_tabs">
+
+						<li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
+						<li><a href="#service-two" data-toggle="tab">PRODUCT INFO</a></li>
+						<li><a href="#service-three" data-toggle="tab">REVIEWS</a></li>
+
+					</ul>
+			<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade in active" id="service-one">
+
+						<section class="container product-info">
+							The Corsair Gaming Series GS600 power supply is the ideal price-performance solution for building or upgrading a Gaming PC. A single +12V rail provides up to 48A of reliable, continuous power for multi-core gaming PCs with multiple graphics cards. The ultra-quiet, dual ball-bearing fan automatically adjusts its speed according to temperature, so it will never intrude on your music and games. Blue LEDs bathe the transparent fan blades in a cool glow. Not feeling blue? You can turn off the lighting with the press of a button.
+
+							<h3>Corsair Gaming Series GS600 Features:</h3>
+							<li>It supports the latest ATX12V v2.3 standard and is backward compatible with ATX12V 2.2 and ATX12V 2.01 systems</li>
+							<li>An ultra-quiet 140mm double ball-bearing fan delivers great airflow at an very low noise level by varying fan speed in response to temperature</li>
+							<li>80Plus certified to deliver 80% efficiency or higher at normal load conditions (20% to 100% load)</li>
+							<li>0.99 Active Power Factor Correction provides clean and reliable power</li>
+							<li>Universal AC input from 90~264V — no more hassle of flipping that tiny red switch to select the voltage input!</li>
+							<li>Extra long fully-sleeved cables support full tower chassis</li>
+							<li>A three year warranty and lifetime access to Corsair’s legendary technical support and customer service</li>
+							<li>Over Current/Voltage/Power Protection, Under Voltage Protection and Short Circuit Protection provide complete component safety</li>
+							<li>Dimensions: 150mm(W) x 86mm(H) x 160mm(L)</li>
+							<li>MTBF: 100,000 hours</li>
+							<li>Safety Approvals: UL, CUL, CE, CB, FCC Class B, TÜV, CCC, C-tick</li>
+						</section>
+
+					</div>
+				<div class="tab-pane fade" id="service-two">
+
+					<section class="container">
+
+					</section>
+
+				</div>
+				<div class="tab-pane fade" id="service-three">
+
+				</div>
+			</div>
+			<hr>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<!--<div class="row">-->
+	<!--<div class="col-sm-7">-->
+	<!--{%if object.images.all%}-->
+		<!--<div class="carousel slide" id="myCarousel">-->
+		    <!--&lt;!&ndash; Carousel items &ndash;&gt;-->
+		    <!--<div class="carousel-inner">-->
+		    <!--{%for product_image in object.images.all%}-->
+		        <!--<div class="{% if forloop.first %} active{%endif%} item" data-slide-number="{{product_image.id}}">-->
+		        <!--<img src="{%if product_image%} {{product_image.image|thumbnail_url:'xlg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}">-->
+		        <!--</div>-->
+		    <!--{%endfor%}-->
+		    <!--</div>-->
+		    <!--&lt;!&ndash; Carousel nav &ndash;&gt;-->
+		    <!--<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">-->
+		        <!--<span class="glyphicon glyphicon-chevron-left"></span>-->
+		    <!--</a>-->
+		    <!--<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">-->
+		        <!--<span class="glyphicon glyphicon-chevron-right"></span>-->
+		    <!--</a>-->
+		<!--</div>-->
+		<!--{%else%}-->
+		<!--<img src="{% static 'image/image_not_found.jpg'%}" class="thumbnail" width="600" height="350">-->
+		<!--{%endif%}-->
+	<!--</div>-->
+	<!--&lt;!&ndash; END OF SLIDER&ndash;&gt;-->
+	<!--<div class="col-sm-5">-->
+		<!--<h1>{{object.name}}</h1>-->
+		<!--<h2 class="green">${{object.price|floatformat:'0'}}</h2>-->
+		<!--{% if object.stock >= 1%}<h4>{{object.stock}} in Stock</h4>{%else%}<h4>Out Of Stock</h4>{%endif%}-->
+		<!--<hr>-->
+		<!--&lt;!&ndash; FORM&ndash;&gt;-->
+		<!--<form method="POST" {# action="{%url 'cart:cart_add' object.id%}" #} id="cart-form" data-id="{{object.id}}" data-stock="{{object.stock}}">-->
+			<!--{% csrf_token %}-->
+			<!--<input type="submit" class="btn-lg btn-primary" value="Add to Cart" />-->
+		<!--</form>-->
+	<!--</div>-->
+<!--</div>-->
+<!--{%if object.images.all%}-->
+<!--<div class="row hidden-xs" id="slider-thumbs">-->
+	<!--&lt;!&ndash; Bottom switcher of slider &ndash;&gt;-->
+	<!--<ul class="hide-bullets">-->
+		<!--{%for product_image in object.images.all%}-->
+	    <!--<li class="col-sm-2">-->
+	        <!--<a class="thumbnail" id="carousel-selector-{{product_image.id|add:-1}}"><img src="{{product_image.image|thumbnail_url:'sm'}}"></a>-->
+	    <!--</li>-->
+	    <!--{%endfor%}-->
+	<!--</ul>-->
+<!--</div>-->
+<!--{%endif%}-->
+<!--&lt;!&ndash; END OF SLIDER SWITCH BUTTON&ndash;&gt;-->
+<!--<div class="row">-->
+	<!--<div class="col-sm-7">-->
+		<!--<h2>Description</h2>-->
+		<!--{{object.description}}-->
+	<!--</div>-->
+
+<!--</div>-->
+
+<br>
+<!-- Recommendation tag-->
+{%if recommended_products %}
+<div class="row ">
+	<h4 >People who bought this also bought </h4>
+	{% for object in recommended_products%}
+	<div class="col-xs-6 col-md-3 text-center">
+	{%with object.images.all|first as product_image%}
+	<a href="{{object.get_absolute_url}}" class="thumbnail">
+		<img src="{%if product_image%} {{product_image.image|thumbnail_url:'lg'}} {%else%} {% static 'image/image_not_found.jpg'%} {%endif%}" alt="...">
+	{%endwith%}
+		{{object.name}}
+	</a>
+	</div>
+	{%endfor%}
+</div>
+{%endif%}
+<!-- END OF RECOMMENDER -->
+
+{%endblock%}
