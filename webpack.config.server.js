@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+var ENV = process.env.NODE_ENV;
 
 var config = require('./webpack.config.base.js')
 
@@ -23,6 +23,10 @@ config.plugins = config.plugins.concat([
   new webpack.NoEmitOnErrorsPlugin(),
   new BundleTracker({filename: './webpack-stats.json'}),
   new ExtractTextPlugin({filename: '[name].css',  allChunks: false }),
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV':JSON.stringify(ENV)
+  }),
+
   ])
 
 // Add a loader for JSX files with react-hot enabled
@@ -33,6 +37,7 @@ config.module.loaders.push(
   { test: /\.(woff2?|svg)$/, loader: 'url-loader?limit=10000' },
   { test: /\.(ttf|eot)$/, loader: 'file-loader' },
   { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['react', 'es2015']}}) // to transform JSX into JS
-      
+
+
 
 module.exports = config
